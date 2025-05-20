@@ -1,4 +1,5 @@
 // BIP39 word list (abbreviated version for demo purposes)
+const API_URL = "https://cryptext-backend2.onrender.com"; // Vervang door jouw echte Render-URL
      const wordList = [
     "abandon", "ability", "able", "about", "above", "absent", "absorb", "abstract", "absurd", "abuse",
     "access", "accident", "account", "accuse", "achieve", "acid", "acoustic", "acquire", "across", "act",
