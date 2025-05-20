@@ -1176,3 +1176,106 @@ const API_URL = "https://cryptext-backend2.onrender.com"; // Vervang door jouw e
             chatMessages.appendChild(messageElement);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
+// 1. Gebruiker registreren (account aanmaken)
+function registerUser(userId, displayName, publicKey) {
+  return fetch(`${API_URL}/api/users`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: userId, display_name: displayName, public_key: publicKey })
+  })
+  .then(res => res.json());
+}
+
+// 2. Gebruiker ophalen (login of details)
+function fetchUser(userId) {
+  return fetch(`${API_URL}/api/users/${userId}`)
+    .then(res => res.json());
+}
+
+// 3. Contacten ophalen
+function fetchContacts(userId) {
+  return fetch(`${API_URL}/api/contacts?user=${userId}`)
+    .then(res => res.json());
+}
+
+// 3b. Contact toevoegen
+function addContact(userId, contactId) {
+  return fetch(`${API_URL}/api/contacts`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: userId, contact_id: contactId })
+  })
+  .then(res => res.json());
+}
+
+// 3c. Contact verwijderen
+function removeContact(userId, contactId) {
+  return fetch(`${API_URL}/api/contacts/${contactId}?user=${userId}`, {
+    method: 'DELETE'
+  })
+  .then(res => res.json());
+}
+
+// 4. Berichten ophalen
+function fetchMessages(conversationId) {
+  return fetch(`${API_URL}/api/messages?conversation=${conversationId}`)
+    .then(res => res.json());
+}
+
+// 5. Bericht versturen
+function sendMessage(conversationId, senderId, content) {
+  return fetch(`${API_URL}/api/messages`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      conversation: conversationId,
+      sender: senderId,
+      content: content
+    })
+  })
+  .then(res => res.json());
+}
+
+// 6. Bestand/media uploaden (voorbeeld met FormData)
+function uploadFile(conversationId, senderId, file) {
+  const formData = new FormData();
+  formData.append('conversation', conversationId);
+  formData.append('sender', senderId);
+  formData.append('file', file);
+
+  return fetch(`${API_URL}/api/files`, {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json());
+}
+
+// 7. Groep aanmaken
+function createGroup(name, memberIds) {
+  return fetch(`${API_URL}/api/groups`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, members: memberIds })
+  })
+  .then(res => res.json());
+}
+
+// 7b. Groep bijwerken (leden toevoegen/verwijderen)
+function updateGroup(groupId, memberIds) {
+  return fetch(`${API_URL}/api/groups/${groupId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ members: memberIds })
+  })
+  .then(res => res.json());
+}
+
+// 8. Profiel aanpassen (bijv. display name)
+function updateProfile(userId, displayName, newPublicKey) {
+  return fetch(`${API_URL}/api/users/${userId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ display_name: displayName, public_key: newPublicKey })
+  })
+  .then(res => res.json());
+}
