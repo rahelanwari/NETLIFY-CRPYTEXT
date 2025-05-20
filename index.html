@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrypText - Keep It Crypted</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">CrypText</div>
+            <p>Keep It Crypted</p>
+        </div>
+    </header>
+    
+    <div class="main-content">
+        <div class="container">
+            <!-- Add missing elements -->
+            <div id="top-controls">
+                <div id="search-bar">
+                    <input type="text" id="search-contacts" placeholder="Search...">
+                    <div class="search-buttons">
+                        <button id="show-contacts-btn" title="Show All Contacts" style="font-size: 1.5rem; padding: 4px 12px; border-radius: 50%; border: none; background: var(--primary-color); color: #fff; cursor: pointer;">👥</button>
+                        <button id="add-user-btn" title="Add User" style="font-size: 1.5rem; padding: 4px 12px; border-radius: 50%; border: none; background: var(--primary-color); color: #fff; cursor: pointer;">+</button>
+                        <button id="add-group-btn" title="Create Group" style="font-size: 1.5rem; padding: 4px 12px; border-radius: 50%; border: none; background: var(--primary-color); color: #fff; cursor: pointer;">🗫</button>
+                    </div>
+                </div>
+            </div>
+            <img id="profile-display" alt="Profile Picture" style="display: none;">
+
+            <!-- Add User Modal -->
+            <div id="add-user-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 2000;">
+                <div style="background: #fff; padding: 30px 20px; border-radius: 10px; min-width: 300px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); text-align: center;">
+                    <h3>Add User by @ID</h3>
+                    <input type="text" id="new-user-id" maxlength="6" placeholder="Enter 6-digit ID" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 80%; margin-bottom: 15px;">
+                    <div id="add-user-error" style="color: #dc3545; font-size: 0.95em; min-height: 1.5em;"></div>
+                    <button class="btn" id="confirm-add-user-btn">Add</button>
+                    <button class="btn" id="cancel-add-user-btn" style="background: #6c757d; margin-left: 10px;">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Group Select Modal -->
+            <div id="group-modal" class="hidden" style="position: fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; z-index:3000;">
+                <div id="group-modal-content" style="background:#fff; padding:30px 20px; border-radius:10px; min-width:320px; box-shadow:0 2px 10px rgba(0,0,0,0.2); text-align:center;">
+                    <h3>Select Contacts for Group</h3>
+                    <input type="text" id="group-name-input" placeholder="Group Name" style="width:90%;padding:8px;margin-bottom:10px;border-radius:5px;border:1px solid #ccc;">
+                    <form id="group-contacts-form" style="max-height:250px; overflow-y:auto; margin-bottom:15px;">
+                        <!-- Contacts checkboxes will be injected here -->
+                    </form>
+                    <button class="btn" id="create-group-confirm-btn" style="background:#28a745; color:#fff;">Create Group</button>
+                    <button class="btn" id="cancel-group-btn" style="background:#6c757d; margin-left:10px;">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Contacts List Modal with edit/delete -->
+            <div id="contacts-modal" class="hidden" style="position: fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; z-index:3000;">
+                <div id="contacts-modal-content" style="background:#fff; padding:30px 20px; border-radius:10px; min-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); text-align:center;">
+                    <h3>Your Contacts</h3>
+                    <ul id="contacts-list" style="list-style:none; padding:0; max-height:250px; overflow-y:auto; margin-bottom:15px;">
+                        <!-- Contacts will be injected here -->
+                    </ul>
+                    <button class="btn" id="close-contacts-btn" style="background:#6c757d;">Close</button>
+                </div>
+            </div>
+
+            <div id="settings-container">
+                <button class="settings-icon" id="settings-btn">⚙️</button>
+                <div class="settings-bar" id="settings-bar">
+                    <button id="dark-mode-toggle">Toggle Dark Mode</button>
+                    <button id="delete-account-btn" style="color: #fff; background: #dc3545; margin-top: 10px;">Delete</button>
+                    <div class="close-btn-wrapper">
+                        <button id="close-settings-btn">X</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Welcome Screen -->
+            <div class="screen welcome-screen active" id="welcome-screen">
+                <div class="card">
+                    <h2>Welcome to CrypText</h2>
+                    <p>Secure messaging without email or passwords. Your privacy is our priority.</p>
+                    <div class="actions">
+                        <button class="btn" id="create-account-btn">Create New Account</button>
+                        <button class="btn" id="recover-account-btn">Login</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Account Setup Screen -->
+            <div class="screen setup-screen" id="setup-screen">
+                <div class="card">
+                    <h2 class="text-center">Your Account Details</h2>
+                    <p class="text-center">Here is your unique CrypText ID:</p>
+                    <div class="id-display" id="user-id">------</div>
+                    
+                    <div class="form-group">
+                        <label for="display-name">Choose your display name (optional):</label>
+                        <input type="text" id="display-name" class="form-control" placeholder="Enter a display name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-pic">Upload Profile Picture:</label>
+                        <input type="file" id="profile-pic" class="form-control" accept="image/*">
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <strong>Important:</strong> Save your recovery phrase to recover your account later.
+                    </div>
+                    
+                    <h3>Your Recovery Phrase</h3>
+                    <p>Write these 12 words down and store them safely:</p>
+                    
+                    <div class="recovery-phrase" id="recovery-phrase">
+                        <!-- The 12-word recovery phrase will be dynamically added here -->
+                    </div>
+                    <button class="btn btn-block" id="copy-recovery-phrase-btn">Copy Recovery Phrase</button>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="phrase-confirmed"> I have saved my recovery phrase in a safe place
+                        </label>
+                    </div>
+                    
+                    <button class="btn btn-block" id="complete-setup-btn" disabled>Complete Setup</button>
+                    <button class="btn btn-block" id="back-to-welcome-setup" style="background-color: #6c757d; margin-top: 10px;">Back</button>
+                </div>
+            </div>
+            
+            <!-- Account Recovery Screen -->
+            <div class="screen recovery-screen" id="recovery-screen">
+                <div class="card">
+                    <h2 class="text-center">Recover Your Account</h2>
+                    <p>Enter your 12-word recovery phrase to restore your account:</p>
+                    
+                    <div class="recovery-input" id="recovery-input">
+                        <!-- Will be filled by JavaScript -->
+                    </div>
+                    
+                    <div id="recovery-error" class="alert alert-danger hidden">
+                        Invalid recovery phrase. Please check your words and try again.
+                    </div>
+                    
+                    <button class="btn btn-block" id="recover-btn">Recover Account</button>
+                    <button class="btn btn-block" id="back-to-welcome-recovery" style="background-color: #6c757d; margin-top: 10px;">Back</button>
+                </div>
+            </div>
+            
+            <!-- Chat Screen -->
+            <div class="screen chat-screen" id="chat-screen">
+                <div class="chat-header">
+                    <div class="profile-box">
+                        <div class="profile-container" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center;">
+                                <img id="profile-picture" alt="Profile Picture" class="profile-picture" style="display: none;">
+                                <div>
+                                    <p id="chat-display-name">Anonymous User</p>
+                                    <p id="chat-user-id">@123456</p>
+                                </div>
+                            </div>
+                            <!-- Use the same icon and class as the top right settings button -->
+                            <button class="settings-icon" id="profile-settings-btn" title="Edit Profile" style="background: none; border: none; font-size: 1.3em; cursor: pointer; margin-left: 10px;">⋮</button>
+                        </div>
+                    </div>
+                    <p class="chat-subtitle">Your messages</p>
+                </div>
+                <div class="chat-container">
+                    <div class="contact-list">
+                        <div class="contact active-contact" data-id="123456">
+                            <img src="images/crypText.logo.png" alt="CrypText Profile Picture" class="contact-picture">
+                            <div>
+                                <div class="contact-name">crypText Info</div>
+                                <div class="contact-preview">Basic crypText information</div>
+                            </div>
+                        </div>
+                        <div class="contact" data-id="789012" style="position: relative;">
+                            <img src="images/jamal.pfp.webp" alt="Jamal Profile Picture" class="contact-picture">
+                            <div style="flex:1">
+                                <div class="contact-name">Jamal (@789012)</div>
+                                <div class="contact-preview">No messages with this person yet</div>
+                            </div>
+                            <button class="contact-menu-btn" title="More options">⋮</button>
+                        </div>
+                        <div class="contact" data-id="345678" style="position: relative;">
+                            <img src="images/rahel.pfp.jpg" alt="Rahel Profile Picture" class="contact-picture">
+                            <div style="flex:1">
+                                <div class="contact-name">Rahel (@345678)</div>
+                                <div class="contact-preview">No messages with this person yet</div>
+                            </div>
+                            <button class="contact-menu-btn" title="More options">⋮</button>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-box">
+                        <div class="chat-header">
+                            <h3 id="current-chat-name">crypText Info</h3>
+                        </div>
+                        
+                        <div class="chat-messages" id="chat-messages">
+                            <!-- Demo messages -->
+                            <div class="message received">
+                                Hey there! How are you doing today?
+                                <div class="message-time">10:30</div>
+                            </div>
+                            
+                            <div class="message sent">
+                                I'm good! Just trying out this new secure messaging app.
+                                <div class="message-time">10:31</div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input">
+                            <input type="file" id="file-input" accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar" style="display:none;">
+                            <div id="emoji-picker" class="emoji-picker hidden">
+                                <span>😀</span>
+                                <span>😃</span>
+                                <span>😄</span>
+                                <span>😁</span>
+                                <span>😆</span>
+                                <span>😅</span>
+                                <span>😂</span>
+                                <span>🤣</span>
+                                <span>😊</span>
+                                <span>😇</span>
+                                <span>🙂</span>
+                                <span>🙃</span>
+                                <span>😉</span>
+                                <span>😌</span>
+                                <span>😍</span>
+                                <span>🥰</span>
+                                <span>😘</span>
+                                <span>😗</span>
+                                <span>😙</span>
+                                <span>😚</span>
+                                <span>😋</span>
+                                <span>😛</span>
+                                <span>😝</span>
+                                <span>😜</span>
+                                <span>🤪</span>
+                                <span>🤨</span>
+                                <span>🧐</span>
+                                <span>🤓</span>
+                                <span>😎</span>
+                                <span>🥳</span>
+                                <span>😏</span>
+                                <span>😒</span>
+                                <span>😞</span>
+                                <span>😔</span>
+                                <span>😟</span>
+                                <span>😕</span>
+                                <span>🙁</span>
+                                <span>☹️</span>
+                                <span>😣</span>
+                                <span>😖</span>
+                                <span>😫</span>
+                                <span>😩</span>
+                                <span>🥺</span>
+                                <span>😢</span>
+                                <span>😭</span>
+                                <span>😤</span>
+                                <span>😠</span>
+                                <span>😡</span>
+                                <span>🤬</span>
+                                <span>🤯</span>
+                                <span>😳</span>
+                                <span>🥵</span>
+                                <span>🥶</span>
+                                <span>😱</span>
+                                <span>😨</span>
+                                <span>😰</span>
+                                <span>😥</span>
+                                <span>😓</span>
+                                <span>🤗</span>
+                                <span>🤔</span>
+                                <span>🤭</span>
+                                <span>🤫</span>
+                                <span>🤥</span>
+                                <span>😶</span>
+                                <span>😐</span>
+                                <span>😑</span>
+                                <span>😬</span>
+                                <span>🙄</span>
+                                <span>😯</span>
+                                <span>😦</span>
+                                <span>😧</span>
+                                <span>😮</span>
+                                <span>😲</span>
+                                <span>🥱</span>
+                                <span>😴</span>
+                                <span>🤤</span>
+                                <span>😪</span>
+                                <span>😵</span>
+                                <span>🤐</span>
+                                <span>🥴</span>
+                                <span>🤢</span>
+                                <span>🤮</span>
+                                <span>🤧</span>
+                                <span>😷</span>
+                                <span>🤒</span>
+                                <span>🤕</span>
+                                <span>🤑</span>
+                                <span>🤠</span>
+                                <span>😈</span>
+                                <span>👿</span>
+                                <span>👹</span>
+                                <span>👺</span>
+                                <span>🤡</span>
+                                <span>💩</span>
+                                <span>👻</span>
+                                <span>💀</span>
+                                <span>☠️</span>
+                                <span>👽</span>
+                                <span>👾</span>
+                                <span>🤖</span>
+                                <span>😺</span>
+                                <span>😸</span>
+                                <span>😹</span>
+                                <span>😻</span>
+                                <span>😼</span>
+                                <span>😽</span>
+                                <span>🙀</span>
+                                <span>😿</span>
+                                <span>😾</span>
+                                <span>🙈</span>
+                                <span>🙉</span>
+                                <span>🙊</span>
+                                <span>💋</span>
+                                <span>💌</span>
+                                <span>💘</span>
+                                <span>💝</span>
+                                <span>💖</span>
+                                <span>💗</span>
+                                <span>💓</span>
+                                <span>💞</span>
+                                <span>💕</span>
+                                <span>💟</span>
+                                <span>❣️</span>
+                                <span>💔</span>
+                                <span>❤️</span>
+                                <span>🧡</span>
+                                <span>💛</span>
+                                <span>💚</span>
+                                <span>💙</span>
+                                <span>💜</span>
+                                <span>🤎</span>
+                                <span>🖤</span>
+                                <span>🤍</span>
+                                <span>💯</span>
+                                <span>💢</span>
+                                <span>💥</span>
+                                <span>💫</span>
+                                <span>💦</span>
+                                <span>💨</span>
+                                <span>🕳️</span>
+                            </div>
+                            <input type="text" placeholder="Type a message..." id="message-input">
+                            <button class="btn" id="file-btn" title="Send File" style="margin-right:8px;">📎</button>
+                            <button class="btn" id="emoji-btn">😀</button>
+                            <button class="btn" id="send-btn">Send</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" id="logout-btn">Log out</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="about-bar">
+                <a href="about.html" class="about-link">About</a>
+                <span class="dot-separator">•</span>
+                <a href="contact.html" class="about-link">Contact Us</a>
+                <span class="dot-separator">•</span>
+                <a href="opensource.html" class="about-link">Open Source</a>
+            </div>
+            <p>CrypText &copy; 2025 - Keep It Crypted</p>
+        </div>
+    </footer>
+
+    <!-- Place your modal here -->
+    <div id="delete-account-modal" class="hidden" style="position: fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; z-index:3000;">
+        <div id="delete-account-modal-content" style="background:#fff; padding:30px 20px; border-radius:10px; min-width:320px; box-shadow:0 2px 10px rgba(0,0,0,0.2); text-align:center;">
+            <h3>Are you sure?</h3>
+            <div style="margin: 20px 0;">
+                <label style="cursor:pointer;">
+                    <input type="checkbox" id="confirm-delete-checkbox" style="margin-right:8px;">
+                    Yes, I understand this action is permanent.
+                </label>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 10px;">
+                <button class="btn" id="delete-messages-btn" style="background:#ffc107; color:#212223;" disabled>Delete All Messages</button>
+                <button class="btn" id="panic-delete-account-btn" style="background:#dc3545; color:#fff;" disabled>Panic (Delete Account & All Data)</button>
+            </div>
+            <button class="btn" id="cancel-delete-account-btn" style="background:#6c757d; margin-left:10px;">Cancel</button>
+            <div style="margin-top:15px; font-size:0.95em; color:#888;">
+                <strong>Delete All Messages:</strong> This will not delete your account, only messages sent or received by you.<br>
+                <strong>Panic:</strong> This will delete all data and messages linked to you, your account will be wiped and cannot be recovered.
+            </div>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="hidden" style="position: fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; z-index:4000;">
+        <div id="profile-modal-content" style="background:#fff; padding:30px 20px; border-radius:10px; min-width:320px; box-shadow:0 2px 10px rgba(0,0,0,0.2); text-align:center;">
+            <h3>Edit Profile</h3>
+            <div style="margin-bottom: 15px;">
+                <img id="modal-profile-picture" src="" alt="Profile Picture" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; display:block; margin-left:auto; margin-right:auto;">
+                <input type="file" id="modal-profile-pic-input" accept="image/*" style="margin-bottom:10px;">
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label for="modal-display-name" style="font-weight:bold;">Display Name:</label>
+                <input type="text" id="modal-display-name" style="width:80%; padding:5px; border-radius:5px; border:1px solid #ccc;" maxlength="32">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight:bold;">User ID:</label>
+                <span id="modal-user-id" style="margin-left:5px; font-family:monospace;"></span>
+            </div>
+            <button class="btn" id="save-profile-btn" style="background:#28a745; color:#fff;">Save</button>
+            <button class="btn" id="cancel-profile-btn" style="background:#6c757d; margin-left:10px;">Cancel</button>
+        </div>
+    </div>
+
+    <div id="edit-contact-modal" class="hidden" style="position: fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; z-index:4000;">
+        <div id="edit-contact-modal-content" style="background:#fff; padding:30px 20px; border-radius:10px; min-width:300px; box-shadow:0 2px 10px rgba(0,0,0,0.2); text-align:center;">
+            <h3>Edit Contact</h3>
+            <input type="text" id="edit-contact-name" style="width:80%; padding:5px; border-radius:5px; border:1px solid #ccc; margin-bottom:10px;">
+            <div style="margin-bottom:10px;">
+                <span id="edit-contact-id" style="font-family:monospace;"></span>
+            </div>
+            <button class="btn" id="save-contact-btn" style="background:#28a745; color:#fff;">Save</button>
+            <button class="btn" id="delete-contact-btn" style="background:#dc3545; color:#fff; margin-left:10px;">Delete</button>
+            <button class="btn" id="cancel-edit-contact-btn" style="background:#6c757d; margin-left:10px;">Cancel</button>
+        </div>
+    </div>
+
+    <div id="contact-context-menu" class="hidden" style="position:absolute; z-index:2000; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15); min-width:140px;">
+        <button class="context-menu-item" id="clear-chat-btn" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:pointer;">Clear Chat</button>
+        <button class="context-menu-item" id="delete-chat-btn" style="width:100%; padding:10px; border:none; background:none; text-align:left; color:#dc3545; cursor:pointer;">Delete Chat</button>
+    </div>
+
+    <!-- Place scripts here, just before </body> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

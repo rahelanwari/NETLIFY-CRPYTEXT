@@ -1,0 +1,955 @@
+:root {
+    --primary-color: #212223;
+    --dark-color: #1a1a2e;
+    --light-color: #f5f5f5;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body, h1, h2, h3, h4, p, ul, li {
+    text-align: center;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--light-color);
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.main-content {
+    padding: 30px 0;
+    min-height: calc(100vh - 140px);
+}
+
+.card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    display: inline-block;
+    background: var(--primary-color); /* Default background color */
+    color: #fff; /* Default text color */
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: #7c7c7c; /* Hover background color */
+    transform: translateY(-2px);
+}
+
+.btn:focus,
+.btn:active {
+    background: var(--primary-color); /* Keep the same background color */
+    color: #fff; /* Keep the same text color */
+    outline: none; /* Remove the default blue outline */
+    box-shadow: none; /* Remove any default focus shadow */
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Screens */
+.screen {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+/* Welcome Screen */
+.welcome-screen {
+    text-align: center;
+    padding: 20px;
+}
+
+.welcome-screen h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.welcome-screen p {
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* Setup Screen */
+.setup-screen h2 {
+    margin-bottom: 20px;
+}
+
+.id-display {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 5px;
+    margin: 20px 0;
+    color: var(--primary-color);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Recovery Phrase */
+.recovery-phrase {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 25px 0;
+}
+
+.phrase-word {
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.phrase-word span {
+    font-weight: bold;
+    color: #666;
+    margin-right: 5px;
+}
+
+/* Chat Screen */
+.chat-container {
+    display: flex; /* Use flexbox for horizontal alignment */
+    flex-direction: row; /* Ensure the layout is side-by-side */
+    height: 100vh; /* Full height for the chat container */
+    margin-top: 0; /* Remove unnecessary margin */
+}
+
+.contact-list {
+    width: 30%; /* Allocate 30% of the width for the contact list */
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Enable scrolling for long contact lists */
+    padding: 10px; /* Add padding for better spacing */
+    height: 100%; /* Ensure it stretches to full height */
+}
+
+.contact {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background 0.3s;
+    position: relative;
+}
+
+.contact:hover {
+    background: #f9f9f9;
+}
+
+.contact.active-contact {
+    background: #e8f0fe;
+    border-left: 3px solid var(--primary-color);
+}
+
+.contact-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.contact-preview {
+    font-size: 0.9rem;
+    color: #777;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.contact-picture {
+    width: 40px; /* Set the size of the profile picture */
+    height: 40px; /* Set the size of the profile picture */
+    border-radius: 50%; /* Make the picture circular */
+    margin-right: 10px; /* Add spacing between the picture and text */
+    vertical-align: middle; /* Align the picture with the text */
+}
+
+.contact-menu-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 1.3em;
+    color: #888;
+    cursor: pointer;
+    padding: 0 4px;
+    z-index: 2;
+    transition: color 0.2s;
+}
+
+.contact-menu-btn:hover {
+    color: #212223;
+}
+
+.chat-box {
+    width: 70%; /* Allocate 70% of the width for the chat box */
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-left: 10px; /* Add spacing between the contact list and chat box */
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensure it stretches to full height */
+}
+
+.chat-header {
+    text-align: left; /* Align all elesments to the left */
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 15px;
+}
+
+.profile-container {
+    display: flex; /* Use flexbox for horizontal alignment */
+    align-items: center; /* Vertically align the profile picture and text */
+    gap: 10px; /* Add spacing between the profile picture and the text */
+}
+
+.profile-picture {
+    width: 60px; /* Set the size of the profile picture */
+    height: 60px; /* Set the size of the profile picture */
+    border-radius: 50%; /* Make the picture circular */
+    display: block; /* Ensure the image is displayed */
+    object-fit: cover; /* Ensure the image fits within the circle */
+}
+
+#chat-display-name {
+    font-size: 1.2rem; /* Font size for the name */
+    font-weight: bold; /* Make the name bold */
+    margin: 0; /* Remove default margins */
+}
+
+#chat-user-id {
+    font-size: 1rem; /* Font size for the user ID */
+    font-weight: bold;
+    color: #212223; /* Subtle color for the user ID */
+    margin: 0; /* Remove default margins */
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.message {
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    max-width: 70%;
+    word-break: break-word;
+}
+
+.received {
+    background: #f1f0f0;
+    align-self: flex-start;
+}
+
+.sent {
+    background: var(--primary-color);
+    color: white;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.message-time {
+    font-size: 0.7rem;
+    text-align: right;
+    margin-top: 5px;
+    opacity: 0.7;
+}
+
+.chat-input {
+    display: flex;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    margin-right: 10px;
+}
+
+.chat-input button#emoji-btn {
+    margin-right: 1px; /* Add space to the right of the emoji button */
+}
+
+.chat-input button#send-btn {
+    margin-left: 7px; /* Add space to the left of the send button */
+}
+
+/* Search Bar */
+#search-contacts {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    border: 2px solid #212223; /* Updated color */
+    border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: #f5f5f5; /* Optional: Light background for contrast */
+    margin-bottom: 12px;
+}
+
+#search-contacts:focus {
+    border-color: #212223; /* Updated focus color */
+    box-shadow: 0 0 10px rgba(33, 34, 35, 0.5); /* Slight shadow with the same color */
+}
+
+/* Recovery Screen */
+.recovery-input {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 25px 0;
+}
+
+.word-input {
+    margin-bottom: 10px;
+}
+
+.word-input label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.word-input input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Utility classes */
+.hidden {
+    display: none !important;
+}
+
+.alert {
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .chat-container {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .contact-list, .chat-box {
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 20px;
+    }
+    
+    .recovery-phrase, .recovery-input {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Dark Mode Styles */
+.dark-mode {
+    background-color: #18191a;
+    color: #e4e6eb;
+}
+
+.dark-mode header,
+.dark-mode footer {
+    background-color: #242526;
+    color: #e4e6eb;
+}
+
+.dark-mode .container {
+    background: none;
+}
+
+.dark-mode .card {
+    background: #242526;
+    color: #e4e6eb;
+    border: 1px solid #393a3b;
+}
+
+.dark-mode .btn,
+.dark-mode #logout-btn,
+.dark-mode .btn-block {
+    background: #3a3b3c;
+    color: #e4e6eb;
+    border: none;
+}
+
+.dark-mode .btn:hover,
+.dark-mode #logout-btn:hover {
+    background: #4e4f50;
+    color: #fff;
+}
+
+.dark-mode .settings-bar {
+    background-color: #242526;
+    border-left: 1px solid #393a3b;
+}
+
+.dark-mode #dark-mode-toggle {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+.dark-mode #dark-mode-toggle:hover {
+    background: #4e4f50;
+}
+
+.dark-mode #close-settings-btn {
+    color: #e4e6eb;
+}
+
+.dark-mode .close-btn-wrapper {
+    background: none;
+}
+
+.dark-mode .contact-list {
+    background: #242526;
+    border: none;
+    box-shadow: none;
+}
+
+.dark-mode .contact {
+    background: transparent;
+    border-bottom: 1px solid #393a3b;
+    color: #e4e6eb;
+}
+
+.dark-mode .contact.active-contact {
+    background: #393a3b;
+    border-left: 3px solid #e4e6eb;
+}
+
+.dark-mode .contact-name,
+.dark-mode .contact-preview {
+    color: #e4e6eb;
+}
+
+.dark-mode .chat-box {
+    background: #18191a;
+    color: #e4e6eb;
+    border: none;
+    box-shadow: none;
+}
+
+.dark-mode .chat-header,
+.dark-mode .chat-subtitle {
+    background: none;
+    color: #e4e6eb;
+    border-bottom: 1px solid #393a3b;
+}
+
+.dark-mode .profile-box {
+    background: #242526;
+    border: 1px solid #393a3b;
+    color: #e4e6eb;
+}
+
+.dark-mode .profile-picture,
+.dark-mode .contact-picture {
+    border: 2px solid #393a3b;
+}
+
+.dark-mode .chat-messages {
+    background: #18191a;
+}
+
+.dark-mode .message.received {
+    background: #242526;
+    color: #e4e6eb;
+}
+
+.dark-mode .message.sent {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+.dark-mode .message-time {
+    color: #b0b3b8;
+}
+
+.dark-mode .chat-input {
+    border-top: 1px solid #393a3b;
+}
+
+.dark-mode .chat-input input {
+    background: #242526;
+    color: #e4e6eb;
+    border: 1px solid #393a3b;
+}
+
+.dark-mode .chat-input input::placeholder {
+    color: #b0b3b8;
+}
+
+.dark-mode .emoji-picker {
+    background: #242526;
+    border: 1px solid #393a3b;
+    color: #e4e6eb;
+}
+
+.dark-mode .emoji-picker span {
+    color: #e4e6eb;
+}
+
+.dark-mode .recovery-phrase,
+.dark-mode .phrase-word {
+    background: #242526;
+    color: #e4e6eb;
+    border: 1px solid #393a3b;
+}
+
+.dark-mode .form-control,
+.dark-mode input,
+.dark-mode textarea {
+    background: #242526;
+    color: #e4e6eb;
+    border: 1px solid #393a3b;
+}
+
+.dark-mode .form-control::placeholder,
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder {
+    color: #b0b3b8;
+}
+
+.dark-mode .alert-success {
+    background: #234d20;
+    color: #e4e6eb;
+    border: 1px solid #155724;
+}
+
+.dark-mode .alert-danger {
+    background: #5a1a1a;
+    color: #e4e6eb;
+    border: 1px solid #721c24;
+}
+
+.dark-mode .about-bar {
+    background: #242526;
+    color: #e4e6eb;
+    border-top: 1px solid #393a3b;
+}
+
+.dark-mode .about-link {
+    color: #e4e6eb;
+}
+
+.dark-mode .about-link:hover {
+    color: #4e8cff;
+}
+
+.dark-mode .dot-separator {
+    color: #b0b3b8;
+}
+
+.dark-mode .back-button {
+    color: #e4e6eb;
+    background: #242526;
+    border: 1px solid #393a3b;
+}
+
+.dark-mode .back-button:hover {
+    background: #3a3b3c;
+    color: #fff;
+}
+
+.dark-mode #chat-user-id {
+    color: #e4e6eb;
+}
+
+.dark-mode #search-contacts {
+    color: #000 !important;
+    background-color: #f5f5f5 !important;
+}
+
+/* Dark Mode Toggle */
+#dark-mode-toggle {
+    padding: 10px 20px;
+    background-color: #212223; /* Dark background for the button */
+    color: white; /* White text for contrast */
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    max-width: 200px; /* Optional: Limit the width of the button */
+}
+
+#dark-mode-toggle:hover {
+    background-color: #333; /* Slightly lighter shade for hover effect */
+    transform: scale(1.05);
+}
+
+#dark-mode-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Top Controls */
+#top-controls {
+    display: none;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 20px;
+    gap: 0;
+}
+
+#chat-screen.active ~ #top-controls,
+#top-controls:has(+ #chat-screen.active) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 15px;
+}
+
+#search-bar {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.search-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    justify-content: center;
+    width: 100%;
+}
+
+.profile-box {
+    border: 1px solid #ddd; /* Light border for the box */
+    border-radius: 10px; /* Rounded corners */
+    padding: 15px; /* Add padding inside the box */
+    background-color: #f9f9f9; /* Light background color */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    display: inline-block; /* Ensure the box wraps the content */
+    margin-bottom: 15px; /* Add spacing below the box */
+}
+
+/* Settings Button */
+#settings-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.settings-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Remove background from the top right settings button */
+.settings-icon {
+    background: none !important;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: transform 0.2s;
+    padding: 0;
+    box-shadow: none;
+}
+
+/* Settings Bar */
+.settings-bar {
+    position: fixed;
+    top: 0;
+    right: -250px; /* Start off-screen */
+    width: 250px;
+    height: 100vh;
+    background-color: #f9f9f9;
+    border-left: 1px solid #ddd;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 15px;
+    z-index: 1000;
+    transition: right 0.3s ease; /* Smooth transition */
+}
+
+.settings-bar.active {
+    right: 0; /* Slide into view */
+}
+
+.settings-bar button {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.settings-bar button:hover {
+    background-color: #333;
+}
+
+/* Close Button */
+#close-settings-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    align-self: unset; /* Remove previous alignment */
+    margin: 0;         /* Remove previous margin */
+    transition: transform 0.2s ease;
+}
+
+#close-settings-btn:hover {
+    transform: scale(1.2);
+}
+
+/* Styling for the About Bar */
+.about-bar {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f8f9fa; /* Light background */
+    border-top: 1px solid #ddd;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+    border-radius: 10px; /* Soften the edges */
+}
+
+.about-link {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.about-link:hover {
+    color: #007bff; /* Optional: Change color on hover */
+}
+
+/* Dot Separator */
+.dot-separator {
+    margin: 0 10px;
+    color: #666; /* Adjust color to match your design */
+    font-size: 1.2rem; /* Adjust size if needed */
+    vertical-align: middle;
+}
+
+/* Back Button */
+.back-button {
+    font-size: 16px;
+    color: #212223; /* Updated color */
+    padding: 5px 10px;
+    border: 1px solid #212223; /* Updated border color */
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s, color 0.3s;
+    display: inline-block;
+    margin: 10px;
+    text-align: left; /* Align text to the left */
+}
+
+.back-button:hover {
+    background-color: #212223; /* Updated hover background color */
+    color: #fff; /* Updated hover text color */
+}
+
+.chat-subtitle {
+    color: #212223;; /* Use the specified color */
+    font-weight: bold; /* Make the text thicker */
+    font-size: 1.5rem; /* Optional: Adjust font size for better visibility */
+    margin-top: 10px; /* Optional: Add spacing above the text */
+    text-align: left; /* Align text to the left */
+    margin-left: 20x; /* Add left margin to move it further left */
+}
+
+/* Default style for the Log Out button */
+.logout-button {
+    color: #212223; /* Default color */
+    background-color: transparent; /* No background by default */
+    border: 1px solid #212223; /* Optional: Add a border */
+    padding: 10px 20px;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+/* Hover effect for the Log Out button */
+.logout-button:hover {
+    background-color: #212223; /* Darker background on hover */
+    color: #fff; /* White text on hover */
+}
+
+#logout-btn {
+    background: #212223; /* Default background color */
+    color: #fff; /* White text color */
+    border: none; /* Remove border */
+    padding: 12px 25px; /* Consistent padding */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    font-size: 1rem; /* Font size */
+    text-transform: uppercase; /* Uppercase text */
+    letter-spacing: 1px; /* Letter spacing */
+    transition: all 0.3s ease; /* Smooth transition */
+    margin: 40px auto 0; /* Add space above the button and center it */
+    display: block; /* Ensure it appears on its own line */
+    text-align: center; /* Center the button text */
+}
+
+/* Hover effect for the Log Out button */
+#logout-btn:hover {
+    background: #7c7c7c; /* Hover background color */
+    color: #fff; /* Keep text white on hover */
+}
+
+/* Emoji Picker */
+.emoji-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    position: absolute;
+    width: 300px;
+    z-index: 1000;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(685px); /* Position closer to the button */
+}
+
+.emoji-picker.hidden {
+    display: none;
+}
+
+.emoji-picker span {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+/* Copy Recovery Phrase Button */
+#copy-recovery-phrase-btn {
+    margin-top: 20px; /* Add spacing above the button */
+}
+
+/* Close Button Wrapper */
+.close-btn-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#add-user-modal.hidden {
+    display: none !important;
+}
+
+#delete-account-btn {
+    display: none;
+}
