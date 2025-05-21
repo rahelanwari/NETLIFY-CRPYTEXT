@@ -36,7 +36,7 @@ const API_URL = "https://cryptext-backend2.onrender.com"; // Vervang door jouw e
     "cereal", "certain", "chair", "chalk", "champion", "change", "chaos", "chapter", "charge", "chase",
     "chat", "cheap", "check", "cheese", "chef", "cherry", "chest", "chicken", "chief", "child",
     "chimney", "choice", "choose", "chronic", "chuckle", "chunk", "churn", "cigar", "cinnamon", "circle",
-    "citizen", "city", "civil", "claim", "clap", "clarify", "claw", "clay", "clean", "clerk",,
+    "citizen", "city", "civil", "claim", "clap", "clarify", "claw", "clay", "clean", "clerk",
     "clever", "click", "client", "cliff", "climb", "clinic", "clip", "clock", "clog", "close",
     "cloth", "cloud", "clown", "club", "clump", "cluster", "clutch", "coach", "coast", "coconut",
     "code", "coffee", "coil", "coin", "collect", "color", "column", "combine", "come", "comfort",
@@ -1281,5 +1281,20 @@ function updateProfile(userId, displayName, newPublicKey) {
   })
   .then(res => res.json());
 }
+
+// --- Supabase functies ---
+async function fetchUsers() {
+  const { data, error } = await supabase
+    .from('users')
+    .select('*');
+  if (error) {
+    console.error('Fout bij ophalen gebruikers:', error);
+  } else {
+    console.log('Gebruikers:', data);
+  }
+}
+
+// Roep deze functie aan bij het laden van de pagina:
+fetchUsers();
 
 
