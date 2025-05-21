@@ -1283,19 +1283,6 @@ function updateProfile(userId, displayName, newPublicKey) {
   .then(res => res.json());
 }
 
-// --- Supabase functies ---
-async function fetchUsers() {
-  const { data, error } = await supabase
-    .from('users')
-    .select('*');
-  if (error) {
-    console.error('Fout bij ophalen gebruikers:', error);
-  } else {
-    console.log('Gebruikers:', data);
-  }
-}
 
-// Roep deze functie aan bij het laden van de pagina:
-fetchUsers();
 
 
