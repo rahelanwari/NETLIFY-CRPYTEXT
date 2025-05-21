@@ -1,4 +1,8 @@
 // BIP39 word list (abbreviated version for demo purposes)
+const supabaseUrl = 'https://cryptext.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // anon key
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
 const API_URL = "https://cryptext-backend2.onrender.com"; // Vervang door jouw echte Render-URL
 
      const wordList = [
