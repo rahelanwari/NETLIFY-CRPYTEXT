@@ -1,5 +1,9 @@
 // BIP39 word list (abbreviated version for demo purposes)
 const API_URL = "https://cryptext-backend2.onrender.com"; // Vervang door jouw echte Render-URL
+const supabaseUrl = 'https://cryptext.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // anon key
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
      const wordList = [
     "abandon", "ability", "able", "about", "above", "absent", "absorb", "abstract", "absurd", "abuse",
     "access", "accident", "account", "accuse", "achieve", "acid", "acoustic", "acquire", "across", "act",
@@ -1279,3 +1283,20 @@ function updateProfile(userId, displayName, newPublicKey) {
   })
   .then(res => res.json());
 }
+
+// ... JOUW BESTAANDE CODE ... (inclusief backend fetch-calls)
+
+// --- Supabase functies ---
+async function fetchUsers() {
+  const { data, error } = await supabase
+    .from('users')
+    .select('*');
+  if (error) {
+    console.error('Fout bij ophalen gebruikers:', error);
+  } else {
+    console.log('Gebruikers:', data);
+  }
+}
+
+// Roep deze functie aan bij het laden van de pagina:
+fetchUsers();
