@@ -1,6 +1,5 @@
 // BIP39 word list (abbreviated version for demo purposes)
 
-
 const API_URL = "https://cryptext-backend2.onrender.com"; // Vervang door jouw echte Render-URL
 
      const wordList = [
@@ -1179,7 +1178,257 @@ const API_URL = "https://cryptext-backend2.onrender.com"; // Vervang door jouw e
             chatMessages.appendChild(messageElement);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-// 1. Gebruiker registreren (account aanmaken)
+
+        // Friend requests data structure
+        let friendRequests = [];
+
+        // Friend requests functionality
+        const friendRequestsBtn = document.getElementById('friend-requests-btn');
+        const friendRequestsModal = document.getElementById('friend-requests-modal');
+        const friendRequestsList = document.getElementById('friend-requests-list');
+        const noRequestsMessage = document.getElementById('no-requests-message');
+        const closeRequestsBtn = document.getElementById('close-requests-btn');
+        const requestsCount = document.getElementById('friend-requests-count');
+
+        // Show friend requests modal
+        friendRequestsBtn.addEventListener('click', () => {
+            friendRequestsModal.classList.remove('hidden');
+            renderFriendRequests();
+        });
+
+        // Close friend requests modal
+        closeRequestsBtn.addEventListener('click', () => {
+            friendRequestsModal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside
+        friendRequestsModal.addEventListener('click', (e) => {
+            if (e.target === friendRequestsModal) {
+                friendRequestsModal.classList.add('hidden');
+            }
+        });
+
+        // Render friend requests
+        function renderFriendRequests() {
+            friendRequestsList.innerHTML = '';
+            
+            if (friendRequests.length === 0) {
+                noRequestsMessage.classList.remove('hidden');
+                return;
+            }
+            
+            noRequestsMessage.classList.add('hidden');
+            
+            friendRequests.forEach((request, index) => {
+                const requestElement = document.createElement('li');
+                requestElement.className = 'friend-request-item';
+                requestElement.innerHTML = `
+                    <div class="friend-request-info">
+                        <img src="${request.profilePic || 'images/default-profile.png'}" 
+                             alt="Profile Picture" 
+                             style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        <div>
+                            <strong>${request.name}</strong>
+                            <div style="font-size: 0.9em; color: #666;">@${request.id}</div>
+                        </div>
+                    </div>
+                    <div class="friend-request-actions">
+                        <button class="accept-btn" onclick="acceptRequest(${index})">Accept</button>
+                        <button class="decline-btn" onclick="declineRequest(${index})">Decline</button>
+                    </div>
+                `;
+                friendRequestsList.appendChild(requestElement);
+            });
+            
+            updateRequestCount();
+        }
+
+        // Accept friend request
+        function acceptRequest(index) {
+            const request = friendRequests[index];
+            
+            // Create new contact object
+            const newContact = {
+                id: request.id,
+                name: request.name,
+                profilePic: request.profilePic || 'images/default-profile.png',
+                messages: [] // Initialize empty messages array
+            };
+            
+            // Add to contacts array
+            contacts.push(newContact);
+            
+            // Create and append new contact element
+            const contactElement = document.createElement('div');
+            contactElement.className = 'contact';
+            contactElement.dataset.id = request.id;
+            contactElement.innerHTML = `
+                <img src="${newContact.profilePic}" alt="${newContact.name} Profile Picture" class="contact-picture">
+                <div style="flex:1">
+                    <div class="contact-name">${newContact.name} (@${newContact.id})</div>
+                    <div class="contact-preview">No messages with this person yet</div>
+                </div>
+                <button class="contact-menu-btn" title="More options">⋮</button>
+            `;
+            
+            // Add click event to new contact
+            contactElement.addEventListener('click', () => {
+                // Remove active class from all contacts
+                document.querySelectorAll('.contact').forEach(contact => {
+                    contact.classList.remove('active-contact');
+                });
+                
+                // Add active class to clicked contact
+                contactElement.classList.add('active-contact');
+                
+                // Update chat header
+                document.getElementById('current-chat-name').textContent = newContact.name;
+                
+                // Clear chat messages
+                const chatMessages = document.getElementById('chat-messages');
+                chatMessages.innerHTML = '';
+                
+                // Load messages if any exist
+                if (newContact.messages && newContact.messages.length > 0) {
+                    newContact.messages.forEach(msg => {
+                        const messageElement = document.createElement('div');
+                        messageElement.className = `message ${msg.sent ? 'sent' : 'received'}`;
+                        messageElement.innerHTML = `
+                            ${msg.content}
+                            <div class="message-time">${msg.time}</div>
+                        `;
+                        chatMessages.appendChild(messageElement);
+                    });
+                }
+            });
+            
+            // Add the new contact to the contact list in UI
+            const contactList = document.querySelector('.contact-list');
+            contactList.appendChild(contactElement);
+            
+            // Remove from requests
+            friendRequests.splice(index, 1);
+            
+            // Update UI
+            renderFriendRequests();
+            updateRequestCount();
+            
+            // Save contacts to storage
+            saveContactsToStorage();
+            
+            // Show confirmation
+            alert(`${request.name} has been added to your contacts!`);
+            
+            // Optionally auto-select the new contact
+            contactElement.click();
+        }
+
+        // Add function to save contacts to storage
+        function saveContactsToStorage() {
+            localStorage.setItem('contacts', JSON.stringify(contacts));
+        }
+
+        // Add function to load contacts from storage
+        function loadContactsFromStorage() {
+            const savedContacts = localStorage.getItem('contacts');
+            if (savedContacts) {
+                contacts = JSON.parse(savedContacts);
+                // Render loaded contacts
+                contacts.forEach(contact => {
+                    renderContact(contact);
+                });
+            }
+        }
+
+        // Add helper function to render a single contact
+        function renderContact(contact) {
+            const contactElement = document.createElement('div');
+            contactElement.className = 'contact';
+            contactElement.dataset.id = contact.id;
+            contactElement.innerHTML = `
+                <img src="${contact.profilePic}" alt="${contact.name} Profile Picture" class="contact-picture">
+                <div style="flex:1">
+                    <div class="contact-name">${contact.name} (@${contact.id})</div>
+                    <div class="contact-preview">No messages with this person yet</div>
+                </div>
+                <button class="contact-menu-btn" title="More options">⋮</button>
+            `;
+            
+            // Add click event handler
+            contactElement.addEventListener('click', () => {
+                document.querySelectorAll('.contact').forEach(c => {
+                    c.classList.remove('active-contact');
+                });
+                contactElement.classList.add('active-contact');
+                loadChat(contact);
+            });
+            
+            // Add to contact list
+            const contactList = document.querySelector('.contact-list');
+            contactList.appendChild(contactElement);
+        }
+
+        // Add function to load chat
+        function loadChat(contact) {
+            // Update chat header
+            document.getElementById('current-chat-name').textContent = contact.name;
+            
+            // Clear current messages
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.innerHTML = '';
+            
+            // Load messages
+            if (contact.messages && contact.messages.length > 0) {
+                contact.messages.forEach(msg => {
+                    const messageElement = document.createElement('div');
+                    messageElement.className = `message ${msg.sent ? 'sent' : 'received'}`;
+                    messageElement.innerHTML = `
+                        ${msg.content}
+                        <div class="message-time">${msg.time}</div>
+                    `;
+                    chatMessages.appendChild(messageElement);
+                });
+            }
+        }
+
+        // Add this to your initialization code
+        window.addEventListener('DOMContentLoaded', () => {
+            loadContactsFromStorage();
+            // ... other initialization code ...
+        });
+
+        // Decline friend request
+        function declineRequest(index) {
+            const request = friendRequests[index];
+            if (confirm(`Are you sure you want to decline the friend request from ${request.name}?`)) {
+                friendRequests.splice(index, 1);
+                renderFriendRequests();
+            }
+        }
+
+        // Update request count badge
+        function updateRequestCount() {
+            const count = friendRequests.length;
+            requestsCount.textContent = count;
+            requestsCount.style.display = count > 0 ? 'block' : 'none';
+        }
+
+        // Add a test friend request (voor demo doeleinden)
+        function addTestFriendRequest() {
+            friendRequests.push({
+                id: '654321',
+                name: 'Sarah Johnson',
+                profilePic: 'images/sarah.pfp.jpg'
+            });
+            updateRequestCount();
+        }
+
+        // Call this when the page loads to add a test request
+        window.addEventListener('DOMContentLoaded', () => {
+            addTestFriendRequest();
+        });
+
+        // 1. Gebruiker registreren (account aanmaken)
 function registerUser(userId, displayName, publicKey) {
   return fetch(`${API_URL}/api/users`, {
     method: 'POST',
@@ -1281,8 +1530,5 @@ function updateProfile(userId, displayName, newPublicKey) {
     body: JSON.stringify({ display_name: displayName, public_key: newPublicKey })
   })
   .then(res => res.json());
-}
-
-
-
+} 
 
