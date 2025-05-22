@@ -953,3 +953,51 @@ footer {
 #delete-account-btn {
     display: none;
 }
+
+.friend-request-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 5px;
+}
+
+.friend-request-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.friend-request-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.accept-btn {
+    background: var(--success-color);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.decline-btn {
+    background: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Dark mode support */
+.dark-mode .friend-request-item {
+    border-bottom: 1px solid #393a3b;
+}
+
+.dark-mode #friend-requests-modal-content {
+    background: #242526;
+    color: #e4e6eb;
+}
